@@ -1,0 +1,47 @@
+- name: Uninstall old versions
+  ansible.builtin.apt:
+    state: absent
+    pkg:
+    - docker
+    - docker-engine
+    - docker.io
+    - containerd
+    - runc
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    mode: '0755'
+    state: directory
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/docker.list
+    state: absent
+
+- name: install packages to allow apt to use a repository over HTTPS
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+
+- name: set up key of docker repository
+  ansible.builtin.shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o - > /etc/apt/keyrings/docker.gpg
+  changed_when: True
+
+- name: set up docker repository
+  ansible.builtin.shell: echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+- name: install docker
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - docker-buildx-plugin
+    - docker-compose-plugin
+

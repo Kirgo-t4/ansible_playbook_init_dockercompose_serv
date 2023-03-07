@@ -1,0 +1,17 @@
+- name: Download docker-compose binary
+  ansible.builtin.get_url:
+    url: "https://github.com/docker/compose/releases/download/v{{ docker_compose_version }}/docker-compose-linux-x86_64"
+    dest: /root/docker-compose
+    mode: '0755'
+
+- name: Copy file to /usr/bin
+  copy:
+    remote_src: True
+    src: /root/docker-compose
+    dest: /usr/bin
+    mode: '0755'
+
+- name: Cleanup /root directory
+  file:
+    path: /root/docker-compose
+    state: absent

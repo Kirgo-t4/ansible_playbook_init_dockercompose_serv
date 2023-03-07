@@ -1,0 +1,14 @@
+- name: Install iptables-services
+  ansible.builtin.yum:
+    update_cache: yes
+    pkg:
+    - iptables-services
+
+- name: save existing rules
+  ansible.builtin.shell: iptables-save > /etc/sysconfig/iptables
+
+- name: Make sure iptables service is running
+  ansible.builtin.systemd:
+    state: started
+    name: iptables
+    enabled: true

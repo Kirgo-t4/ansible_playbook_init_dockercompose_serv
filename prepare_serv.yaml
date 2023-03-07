@@ -1,0 +1,17 @@
+- name: update packages and upgrade system
+  hosts: all
+
+  roles:
+  - role: upgrade
+    tags:
+    - upgrade
+  - role: install_docker
+    tags:
+      - docker
+  - role: install_docker_compose
+    tags:
+      - docker
+      - docker-compose
+  - role: iptables_default
+    tags:
+    - iptables

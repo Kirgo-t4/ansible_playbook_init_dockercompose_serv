@@ -1,0 +1,8 @@
+- name: Install iptables-persistent
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+    - iptables-persistent
+
+- name: save existing rules
+  ansible.builtin.shell: iptables-save > /etc/iptables/rules.v4

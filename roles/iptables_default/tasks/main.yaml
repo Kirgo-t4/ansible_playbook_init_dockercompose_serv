@@ -1,0 +1,14 @@
+- name: Install iptables
+  ansible.builtin.yum:
+    update_cache: yes
+    pkg:
+    - iptables
+  when: ansible_facts['os_family'] == "RedHat"
+
+- include_tasks: default_rules.yaml
+
+- include_tasks: persistent_ubuntu.yaml
+  when: ansible_facts['os_family'] == "Debian"
+
+- include_tasks: persistent_centos.yaml
+  when: ansible_facts['os_family'] == "RedHat"

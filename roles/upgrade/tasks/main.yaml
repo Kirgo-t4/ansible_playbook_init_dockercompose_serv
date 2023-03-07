@@ -1,0 +1,9 @@
+- name: show what distribution it is
+  debug:
+    msg: "Current OS is: {{ ansible_facts['os_family'] }}"
+
+- include_tasks: apt_upgrade.yaml
+  when: ansible_facts['os_family'] == "Debian"
+
+- include_tasks: yum_upgrade.yaml
+  when: ansible_facts['os_family'] == "RedHat"

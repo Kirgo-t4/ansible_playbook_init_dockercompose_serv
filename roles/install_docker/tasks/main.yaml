@@ -1,0 +1,31 @@
+- name: Get Service Status
+  ansible.builtin.systemd:
+    name: "docker"
+  register: docker_service_status
+
+- debug:
+    var: docker_service_status.status.ActiveState
+
+- ansible.builtin.assert:
+    that:
+    - docker_service_status.status.ActiveState != "active"
+
+
+- include_tasks: install_ubuntu.yaml
+  when: ansible_facts['os_family'] == "Debian"
+
+- include_tasks: install_centos.yaml
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Make sure docker unit is running
+  ansible.builtin.systemd:
+    state: started
+    name: docker
+    enabled: true
+
+- name: Verify that the Docker Engine installation is successful
+  ansible.builtin.shell: docker run --rm hello-world
+  changed_when: false
+  register: helloWorld
+
+- debug: msg="{{ helloWorld.stdout }}"

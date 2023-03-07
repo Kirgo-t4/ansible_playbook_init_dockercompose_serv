@@ -1,0 +1,5 @@
+- name: Upgrade all packages
+  ansible.builtin.yum:
+    update_cache: True
+    name: '*'
+    state: latest
