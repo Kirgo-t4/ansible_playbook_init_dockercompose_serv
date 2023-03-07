@@ -28,5 +28,5 @@ ansible-playbook -i <inventory-file> -b prepare_serv.yaml --ask-pass -K
 ```
 You can also specify tags for making only nessesary operations:
 ```
-ansible-playbook -i inventory-test -b prepare_serv.yaml --ask-pass -K --tags=docker,docker-compose
+ansible-playbook -i <inventory-file> -b prepare_serv.yaml --ask-pass -K --tags=docker,docker-compose
 ```
